@@ -2,8 +2,6 @@
 
 > Translate plain-English game descriptions into formal game theory representations using LLMs, with interactive payoff matrices, game trees, and Nash equilibrium analysis.
 
-Built as a proof-of-concept for Gambit's **GameInterpreter (GSoC 2026, Project 2)**.
-
 ---
 
 ## Quick Start
