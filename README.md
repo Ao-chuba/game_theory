@@ -104,12 +104,3 @@ project-gambit/
 ### `GET /api/examples`
 Returns 10 classic game templates with descriptions.
 
----
-
-## GSoC Alignment
-
-This project directly demonstrates the problem domain of **Gambit GameInterpreter (Project 2)**:
-- LLM integration for structured game extraction (powered by Google Gemini free tier)
-- Formal game representations (normal-form + extensive-form)
-- Nash equilibrium computation
-- Interactive visualization of game structures
