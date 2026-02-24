@@ -10,7 +10,7 @@ Built as a proof-of-concept for Gambit's **GameInterpreter (GSoC 2026, Project 2
 
 ### Prerequisites
 - Node.js 18+
-- OpenAI API key
+- Google Gemini API key (free — get one at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey))
 
 ### 1. Backend
 
@@ -18,7 +18,7 @@ Built as a proof-of-concept for Gambit's **GameInterpreter (GSoC 2026, Project 2
 cd backend
 npm install
 cp .env.example .env
-# Edit .env and add your OPENAI_API_KEY
+# Edit .env and add your GEMINI_API_KEY
 npm run dev
 ```
 
@@ -70,7 +70,7 @@ project-gambit/
 │   └── src/
 │       ├── models/types.ts          # NormalFormGame, ExtensiveFormGame, etc.
 │       ├── services/
-│       │   ├── llm.service.ts       # OpenAI gpt-4o integration
+│       │   ├── llm.service.ts       # Google Gemini gemini-1.5-flash integration
 │       │   ├── parser.service.ts    # Nash solver + game parser
 │       │   └── examples.service.ts  # 10 classic templates
 │       ├── routes/game.routes.ts    # POST /translate, GET /examples
@@ -111,7 +111,7 @@ Returns 10 classic game templates with descriptions.
 ## GSoC Alignment
 
 This project directly demonstrates the problem domain of **Gambit GameInterpreter (Project 2)**:
-- LLM integration for structured game extraction
+- LLM integration for structured game extraction (powered by Google Gemini free tier)
 - Formal game representations (normal-form + extensive-form)
 - Nash equilibrium computation
 - Interactive visualization of game structures

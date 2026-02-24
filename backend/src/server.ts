@@ -14,9 +14,10 @@ app.use(express.json({ limit: '1mb' }));
 app.use('/api', gameRoutes);
 
 // Startup warning
-if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.startsWith('sk-your')) {
-    console.warn('\n⚠️  WARNING: OPENAI_API_KEY is not configured.');
-    console.warn('   Please copy backend/.env.example to backend/.env and add your key.\n');
+if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY.startsWith('AIzaSy-your')) {
+    console.warn('\n⚠️  WARNING: GEMINI_API_KEY is not configured.');
+    console.warn('   Please copy backend/.env.example to backend/.env and add your key.');
+    console.warn('   Get a free key at: https://aistudio.google.com/app/apikey\n');
 }
 
 app.listen(PORT, () => {

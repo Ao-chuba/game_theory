@@ -1,7 +1,7 @@
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { LLMGameResponse } from '../models/types';
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 const SYSTEM_PROMPT = `You are a game theory expert who extracts formal game structures from natural language descriptions.
 
@@ -41,33 +41,36 @@ Rules:
 If the description is too ambiguous to formalize, still return your best attempt and list all issues in "ambiguities".`;
 
 export async function translateGameDescription(description: string): Promise<LLMGameResponse> {
-    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY.startsWith('sk-your')) {
-        throw new Error('OpenAI API key is not configured. Please set OPENAI_API_KEY in your .env file.');
+    if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY.startsWith('AIzaSy-your')) {
+        throw new Error('Gemini API key is not configured. Please set GEMINI_API_KEY in your .env file.');
     }
 
-    const completion = await client.chat.completions.create({
-        model: 'gpt-4o',
-        messages: [
-            { role: 'system', content: SYSTEM_PROMPT },
-            { role: 'user', content: `Extract the game structure from this description:\n\n${description}` }
-        ],
-        temperature: 0.1,
-        response_format: { type: 'json_object' }
+    const model = genAI.getGenerativeModel({
+        model: 'gemini-1.5-flash',
+        generationConfig: {
+            temperature: 0.1,
+            responseMimeType: 'application/json',
+        },
+        systemInstruction: SYSTEM_PROMPT,
     });
 
-    const rawContent = completion.choices[0]?.message?.content;
-    if (!rawContent) throw new Error('Empty response from LLM');
+    const result = await model.generateContent(
+        `Extract the game structure from this description:\n\n${description}`
+    );
+
+    const rawContent = result.response.text();
+    if (!rawContent) throw new Error('Empty response from Gemini');
 
     let parsed: LLMGameResponse;
     try {
         parsed = JSON.parse(rawContent) as LLMGameResponse;
     } catch {
-        throw new Error(`Failed to parse LLM response as JSON: ${rawContent.slice(0, 200)}`);
+        throw new Error(`Failed to parse Gemini response as JSON: ${rawContent.slice(0, 200)}`);
     }
 
     // Basic validation
-    if (!parsed.gameType) throw new Error('LLM response missing gameType');
-    if (!parsed.players || parsed.players.length === 0) throw new Error('LLM response missing players');
+    if (!parsed.gameType) throw new Error('Gemini response missing gameType');
+    if (!parsed.players || parsed.players.length === 0) throw new Error('Gemini response missing players');
     if (!parsed.ambiguities) parsed.ambiguities = [];
     if (!parsed.assumptions) parsed.assumptions = [];
 
